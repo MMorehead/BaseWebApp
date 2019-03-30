@@ -5,6 +5,12 @@
 
 <body>
 
+  <br><br>
+  <button class="btn btn-default" type="button" onclick="toggleSignIn()" id="login">
+    Log In
+  </button>
+
+
   <!-- the classes 'page-header' and 'btn btn-default' create bootstrap components.  -->
   <!-- Check out more components here: http://getbootstrap.com/components/ -->
   <div class="page-header">
@@ -12,15 +18,45 @@
   </div>
 
   <p id="demo">
-    This is me testing out a lil html file
+    Write a message below!
   </p>
 
-  <button class="btn btn-default" type="button" onclick="myFunction()">
-    Try it
+  <form action="/action_page.php">
+    Title:<br>
+    <input type="text" name="Title" id="title">
+    <br>
+    Message:<br>
+    <input type="text" name="Message" id="message">
+    <br><br>
+  </form>
+
+  <button class="btn btn-default" type="button" onclick="handleMessageFormSubmit()" id='submit'>
+    Submit
   </button>
 
-  <div id="doge-image"/>
+  <div id="doge-image" />
+
+  <div id="stream">
+ 
+
+  
 
 </body>
-
+<script>
+ window.onload = function() {
+    const databaseStreamReference = firebase.database().ref('/stream/');
+  
+    databaseStreamReference.on('value', function(snapshot) {
+      var messages = snapshot.val();
+      $('#stream').empty();
+  
+      if (messages) {
+        Object.keys(messages).forEach(function (key) {
+          const message = messages[key];
+          $('#stream').append(`<div><b>${message.title}</b><br>${message.body}<br><br></div>`);
+        });
+      }
+    });
+  };
+</script>
 </html>
